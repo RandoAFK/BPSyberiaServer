@@ -324,8 +324,7 @@ modded class PlayerBase
 					OnTickAdvMedicine_Antidepresant(m_advMedUpdateTimer);
 					OnTickUpdateLastHealthstate();
 					m_advMedUpdateTimer = 0;
-				}
-				
+				}			
 				m_sleepingDecTimer = m_sleepingDecTimer + deltaTime;
 				while (m_sleepingDecTimer > 1.0)
 				{
@@ -432,7 +431,7 @@ modded class PlayerBase
 		float landDiff;
 		pos2d[1] = 0;
 		
-		if (pluginZones.m_config.m_customZones)
+ /*		if (pluginZones.m_config.m_customZones)
 		{
 			foreach (ref ZoneDefinition zone : pluginZones.m_config.m_customZones)
 			{
@@ -460,7 +459,7 @@ modded class PlayerBase
 		{
 			currentZones.Insert(pluginZones.m_config.m_defaultZone);
 		}
-		
+ */		
 		int nullCheckIndex = 0;
 		ref ZoneImplementation zoneImpl;
 		while (nullCheckIndex < m_zones.Count())
@@ -695,6 +694,7 @@ modded class PlayerBase
 			{
 				filter.AddQuantity(GetSyberiaConfig().m_gasMaskFilterDegradationDefault);	
 			}
+<<<<<<< Updated upstream
 		}
 		
 		if (m_zoneGasTotalValue > 0 && !filterProtection)
@@ -706,6 +706,9 @@ modded class PlayerBase
 			m_zoneToxicEffect = m_zoneToxicEffect - 1;
 		}
 		
+=======
+		}	
+>>>>>>> Stashed changes
 		if (m_zoneRadTotalValue > 0)
 		{
 			float radIncrement = (1.0 - CalculateRadiationProtection()) * m_zoneRadTotalValue;
@@ -791,7 +794,9 @@ modded class PlayerBase
 		{
 			GetInventory().DropEntity(InventoryMode.SERVER, this, itemInHands);
 			GetSyberiaRPC().SendToClient(SyberiaRPC.SYBRPC_SCREEN_MESSAGE, GetIdentity(), new Param1<string>("#syb_skill_overweight_item #syb_perk_name_" + SyberiaPerkType.SYBPERK_STRENGTH_HEAVY_ITEMS));
-            SyberiaSoundEmitter.Spawn("JimWow" + Math.RandomIntInclusive(1, 2) + "_SoundEmitter", GetPosition());
+        //    SyberiaSoundEmitter.Spawn("JimWow" + Math.RandomIntInclusive(1, 2) + "_SoundEmitter", GetPosition());
+			if (IsMale()) SyberiaSoundEmitter.Spawn("MaleHeavy" + Math.RandomIntInclusive(1, 14) + "_SoundEmitter", GetPosition());
+			else SyberiaSoundEmitter.Spawn("FemaleHeavy" + Math.RandomIntInclusive(1, 14) + "_SoundEmitter", GetPosition());
 		}
 		
 		// Calculate athletic
@@ -1116,8 +1121,7 @@ modded class PlayerBase
 			m_mindDegradationForce = 0;
 			m_mindDegradationTime = 0;
 			m_mindStateValue = m_mindStateValue + (GetSyberiaConfig().m_mindstateHealPerSec * GetPerkFloatValue(SyberiaPerkType.SYBPERK_IMMUNITY_MENTAL_TIME, 1, 1));
-		}
-		
+		}	
 		if (m_sybstats.m_antidepresantLevel > 0 && m_sybstats.m_antidepresantLevel <= 3)
 		{
 			m_mindStateValue = m_mindStateValue + GetSyberiaConfig().m_antidepresantMindInc[m_sybstats.m_antidepresantLevel - 1];
@@ -1131,12 +1135,12 @@ modded class PlayerBase
 				
 		m_mindStateValue = Math.Clamp(m_mindStateValue, 0, GetSyberiaConfig().m_mindstateMaxValue);
 		
-		if (m_mindStateValue < GetSyberiaConfig().m_mindstateLevel5)
+/*		if (m_mindStateValue < GetSyberiaConfig().m_mindstateLevel5)
 		{
 			float maxHealth = GetMaxHealth("GlobalHealth","Health");
 			DecreaseHealth("", "Health", maxHealth / GetSyberiaConfig().m_mindstateEmptyDeadtimeSec);
 		}
-		if (m_mindStateValue < GetSyberiaConfig().m_mindstateLevel3)
+*/		if (m_mindStateValue < GetSyberiaConfig().m_mindstateLevel3)
 		{
 			float laughtChange = 1 - (m_mindStateValue / GetSyberiaConfig().m_mindstateLevel3);
 			if( Math.RandomFloat01() < laughtChange * 0.1 )
@@ -1287,7 +1291,7 @@ modded class PlayerBase
 				
 		if (result)
 		{
-			SodaCan_EnergyDrink edible_item = SodaCan_EnergyDrink.Cast(source);
+			SodaCan_ColorBase edible_item = SodaCan_ColorBase.Cast(source);
 			if (edible_item)
 			{
 				AddSleepingBoost(amount, 10);
@@ -1604,6 +1608,10 @@ modded class PlayerBase
 				if (m_BleedingManagerServer)
 				{
 					m_BleedingManagerServer.RemoveMostSignificantBleedingSource();
+					if (Math.RandomFloat01() < 0.1 && GetSybStats().m_antibioticsLevel < 3)
+					{
+						m_BleedingManagerServer.SetBloodInfection(true);
+					}
 				}
 			}
 		}
@@ -1993,8 +2001,8 @@ modded class PlayerBase
 			DecreaseHealth("GlobalHealth","Health", (maxHealth / HEMOLOGIC_SHOCK_DIETIME_SEC) * deltaTime);
 			SetSynchDirty();
 		}
-	}*/
-	
+	}
+	*/	
 	protected void OnTickAdvMedicine_HemostatickEffect(float deltaTime)
 	{
 		if (m_sybstats.m_bloodHemostaticEffect)
